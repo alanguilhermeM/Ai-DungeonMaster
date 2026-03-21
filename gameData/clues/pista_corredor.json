@@ -1,0 +1,7 @@
+{
+  "id": "pista_corredor",
+  "name": "Marcas no corredor",
+  "description": "Marcas estranhas no chão, como se algo tivesse sido arrastado.",
+  "foundAt": "hospital_corredor_segundo_andar",
+  "relatedEvents": ["paciente_em_panico"]
+}

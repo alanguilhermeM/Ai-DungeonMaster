@@ -1,0 +1,15 @@
+{
+  "id": "clara_valen",
+  "name": "Clara Valen",
+  "role": "Enfermeira Chefe",
+  "location": "hospital_enfermaria",
+  "personality": ["protetora", "direta", "disciplinada"],
+  "appearance": "Mulher de 32 anos, cabelo preso, postura firme.",
+  "secret": "É apaixonada pelo diretor do hospital",
+  "interactions": ["talk", "ask_help", "question"],
+  "quests": ["medicamento_desaparecido"],
+  "relationships": {
+    "elias_verdan": "paixão",
+    "viktor_kane": "respeito"
+  }
+}

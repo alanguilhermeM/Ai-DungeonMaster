@@ -1,0 +1,16 @@
+{
+  "id": "paciente_em_panico",
+  "name": "Paciente em Pânico",
+  "type": "secondary",
+  "location": "hospital_enfermaria",
+  "npcs": ["clara_valen", "sofia_mendez"],
+  "trigger": {
+    "type": "interaction",
+    "value": "talk_sofia"
+  },
+  "description": "Um paciente começa a gritar dizendo que viu algo no corredor.",
+  "outcomes": ["ganhar_pista_corredor", "ignorar_evento"],
+  "stateChanges": {
+    "hospital": "suspeita"
+  }
+}

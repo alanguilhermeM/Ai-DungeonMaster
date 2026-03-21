@@ -1,0 +1,10 @@
+{
+  "id": "scene_despertar",
+  "name": "Despertar",
+  "location": "hospital_quarto_203",
+  "npcs": ["clara_valen"],
+  "description": "Você acorda em um quarto de hospital, sem memória clara de como chegou ali.",
+  "objectives": ["observar_ambiente", "falar_com_clara"],
+  "actions": ["look_around", "talk_clara"],
+  "nextScenes": ["scene_corredor_inicial"]
+}

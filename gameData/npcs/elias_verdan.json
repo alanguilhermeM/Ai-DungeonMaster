@@ -1,0 +1,15 @@
+{
+  "id": "elias_verdan",
+  "name": "Elias Verdan",
+  "role": "Diretor do Hospital",
+  "location": "hospital_diretor",
+  "personality": ["calmo", "análitico", "observador"],
+  "appearance": "Homem de 55 anos, cabelo grisalho bem penteado, barba curta, usa sempre um jaleco limpo sobre roupas formais.",
+  "secret": "Sabe que alguns pacientes chegaram ao hospital após eventos sobrenaturais que o governo tenta esconder",
+  "interactions": ["talk", "ask_help", "question"],
+  "quests": ["investigar_paciente"],
+  "relationships": {
+    "clara_valen": "respeito",
+    "viktor_kane": "confiança"
+  }
+}

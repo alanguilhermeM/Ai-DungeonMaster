@@ -1,0 +1,10 @@
+{
+  "id": "hospital_enfermaria",
+  "name": "Enfermaria",
+  "floor": "segundo_andar",
+  "description": "Uma sala com vários leitos ocupados por pacientes.",
+  "npcs": ["clara_valen"],
+  "connections": ["hospital_corredor_segundo_andar"],
+  "items": [],
+  "events": ["paciente_em_panico"]
+}

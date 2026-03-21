@@ -1,0 +1,9 @@
+{
+  "id": "investigar_corredor",
+  "name": "Investigar o Corredor",
+  "type": "secundary",
+  "description": "Descubra o que o paciente viu no corredor.",
+  "objectives": ["ir_corredor", "falar_clara", "explorar_subsolo"],
+  "rewards": ["acesso_subsolo"],
+  "status": "locked"
+}
