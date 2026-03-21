@@ -1,0 +1,17 @@
+{
+  "currentLocation": "hospital_quarto_203",
+  "currentScene": "scene_despertar",
+  "player": {
+    "hp": 100,
+    "inventory": []
+  },
+  "activeEvents": [],
+  "completedEvents": [],
+  "activeQuests": [],
+  "completedQuests": [],
+  "discoveredClues": [],
+  "npcStates": {},
+  "worldState": {
+    "hospital": "normal"
+  }
+}

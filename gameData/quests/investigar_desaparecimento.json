@@ -1,0 +1,13 @@
+{
+  "id": "investigar_desaparecimento",
+  "name": "Investigar o desaparecimento",
+  "type": "main",
+  "description": "Descubra o que aconteceu com o paciente desaparecido.",
+  "objectives": [
+    "investigar_quarto_212",
+    "falar_com_clara",
+    "explorar_subsolo"
+  ],
+  "rewards": ["acesso_ala_abandonada"],
+  "status": "locked"
+}

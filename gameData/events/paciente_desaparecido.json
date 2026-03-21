@@ -1,0 +1,16 @@
+{
+  "id": "paciente_desaparecido",
+  "name": "Paciente Desaparecido",
+  "type": "main",
+  "location": "hospital_quarto_212",
+  "npcs": ["clara_valen", "viktor_kane"],
+  "trigger": {
+    "type": "time",
+    "value": "primeira_noite"
+  },
+  "description": "Um paciente desapareceu sem deixar rastros.",
+  "outcomes": ["descobrir_pista", "abrir_ala_abandonada"],
+  "stateChanges": {
+    "hospital_state": "suspeita"
+  }
+}
