@@ -1,26 +1,38 @@
-import { Injectable } from "@nestjs/common";
-import { ActionProcessorService } from "./action-processor.service";
-import { StateManagerService } from "./state-manager.service";
-import { NarrativeEngineService } from "./narrative-engine.service";
+import { Injectable } from '@nestjs/common';
+import { StateManagerService } from './state-manager.service';
 
 @Injectable()
 export class GameEngineService {
-  constructor(
-    private actionProcessor: ActionProcessorService,
-    private stateManager: StateManagerService,
-    private narrative: NarrativeEngineService,
-  ) {}
+  constructor(private readonly stateManager: StateManagerService) {}
 
   async processAction(action: string) {
-    const parsedAction = this.actionProcessor.parse(action);
+    // 1. pegar estado atual
+    const currentState = this.stateManager.getState();
 
-    const newState = this.stateManager.update(parsedAction);
+    // 2. processar ação (simplificado por agora)
+    const result = this.resolveAction(action, currentState);
 
-    const story = await this.narrative.generate(newState, parsedAction);
+    // 3. atualizar estado
+    const newState = this.stateManager.updateState(result);
+
+    // 4. gerar narrativa (placeholder por enquanto)
+    const story = this.generateNarrative(result);
 
     return {
       story,
       gameState: newState,
     };
+  }
+
+  private resolveAction(action: string, state: any) {
+    // versão inicial: só ecoa ação
+    return {
+      type: 'generic',
+      input: action,
+    };
+  }
+
+  private generateNarrative(result: any) {
+    return `Você decide: ${result.input}`;
   }
 }

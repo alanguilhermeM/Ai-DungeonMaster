@@ -1,8 +1,10 @@
 import { Controller, Post, Body } from '@nestjs/common';
-// import { gameService } from './game.service'
+import { GameService } from './game.service'
 
-@Controller('Game')
+@Controller('game')
 export class GameController {
+  constructor(private readonly gameService: GameService) {}
+
   @Post('action')
   handleAction(@Body() body: { action: string }) {
     return this.gameService.handleAction(body.action);
