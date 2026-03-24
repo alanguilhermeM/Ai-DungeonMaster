@@ -8,6 +8,7 @@ import { GameDataModule } from './modules/gamedata/gamedata.module';
 @Module({
   imports: [
     GameModule,
+    GameDataModule
   ],
   controllers: [AppController],
   providers: [AppService],
