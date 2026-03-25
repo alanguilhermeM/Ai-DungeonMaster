@@ -5,7 +5,7 @@ import { AiService } from '../ai/ai.service';
 export class NarrativeEngineService {
   constructor(private ai: AiService) {}
 
-  async generate(state: any, action: any) {
+  async generateNarrative(state: any, action: any) {
     const prompt = `
 Você é um narrador de RPG.
 

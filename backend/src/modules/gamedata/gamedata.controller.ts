@@ -2,7 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 import { GameDataService } from './gamedata.service';
 import * as path from 'path';
 
-@Controller('gamedata')
+@Controller('game')
 export class GameDataController {
   constructor(private readonly gameDataService: GameDataService) {}
 

@@ -1,20 +1,26 @@
 import { Injectable } from '@nestjs/common';
+import { GameDataService } from '../gamedata/gamedata.service';
 
 @Injectable()
 export class StateManagerService {
-  private state = {
-    currentLocation: 'hospital_quarto_203',
-    currentScene: 'scene_despertar',
-    inventory: [],
-    flags: {},
-  };
+  constructor(private gameData: GameDataService) {}
+  private state: any;
 
+  async onModuleInit() {
+    await new Promise((resolve) => setTimeout(resolve, 50)); // workaround simples
+
+    this.state = structuredClone(this.gameData.getGameStateTemplate());
+  }
+  
   getState() {
     return this.state;
   }
 
-  updateState(actionResult: any) {
-    // exemplo simples: não altera nada ainda
+  updateState(result: any) {
+    if (result.type === 'MOVE') {
+      this.state.currentLocation = result.target;
+    }
+
     return this.state;
   }
 }

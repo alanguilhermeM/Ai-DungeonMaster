@@ -1,16 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { StateManagerService } from './state-manager.service';
+import { GameDataService } from '../gamedata/gamedata.service';
 
 @Injectable()
 export class GameEngineService {
-  constructor(private readonly stateManager: StateManagerService) {}
+  constructor(private readonly stateManager: StateManagerService, readonly gameData: GameDataService) {}
 
   async processAction(action: string) {
     // 1. pegar estado atual
     const currentState = this.stateManager.getState();
+    const parsedAction = this.parseAction(action);
 
     // 2. processar ação (simplificado por agora)
-    const result = this.resolveAction(action, currentState);
+    const result = this.resolveAction(parsedAction, currentState);
 
     // 3. atualizar estado
     const newState = this.stateManager.updateState(result);
@@ -24,11 +26,18 @@ export class GameEngineService {
     };
   }
 
-  private resolveAction(action: string, state: any) {
-    // versão inicial: só ecoa ação
+  private resolveAction(parseAction: any, state: any) {
+
     return {
-      type: 'generic',
-      input: action,
+      type: 'OBSERVE',
+      input: parseAction.input
+    };
+  }
+
+  parseAction(action: string) {
+    return {
+      type: "GENERIC",
+      input: action
     };
   }
 
