@@ -11,16 +11,21 @@ export class StateManagerService {
 
     this.state = structuredClone(this.gameData.getGameStateTemplate());
   }
-  
+
   getState() {
     return this.state;
   }
 
   updateState(result: any) {
-    if (result.type === 'MOVE') {
-      this.state.currentLocation = result.target;
-    }
+    switch (result.type) {
+      case 'MOVE': {
+        this.state.previousLocation = this.state.currentLocation;
+        this.state.currentLocation = result.target;
+        return this.state;
+      }
 
-    return this.state;
+      default:
+        return this.state
+    } 
   }
 }

@@ -1,0 +1,10 @@
+{
+  "id": "hospital_corredor_segundo_andar",
+  "name": "Corredor",
+  "floor": "segundo_andar",
+  "description": "Corredor do segundo andar onde conecta ao andar de baixo e as salas do segundo andar",
+  "npcs": [],
+  "connections": ["hospital_enfermaria", "hospital_quarto_203"],
+  "items": [],
+  "events": []
+}
