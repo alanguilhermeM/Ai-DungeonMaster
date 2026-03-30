@@ -5,7 +5,7 @@ import * as path from 'path';
 @Injectable()
 export class GameDataService implements OnModuleInit {
   private basePath: string = path.resolve(__dirname, '../../../../gameData');
-  private data: any = {
+  data: any = {
     npcs: {},
     locations: {},
     clues: {},
@@ -78,5 +78,13 @@ export class GameDataService implements OnModuleInit {
 
   getGameStateTemplate() {
     return this.data.gameStateTemplate;
+  }
+
+  getEvents() {
+    return this.data.events;
+  }
+
+  getEvent(id: string) {
+    return this.data.events[id];
   }
 }

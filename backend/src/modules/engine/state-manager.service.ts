@@ -6,13 +6,17 @@ export class StateManagerService {
   constructor(private gameData: GameDataService) {}
   private state: any;
 
-  async onModuleInit() {
-    await new Promise((resolve) => setTimeout(resolve, 50)); // workaround simples
-
-    this.state = structuredClone(this.gameData.getGameStateTemplate());
-  }
-
   getState() {
+    if (!this.state) {
+      const template = this.gameData.getGameStateTemplate();
+  
+      if (!template || Object.keys(template).length === 0) {
+        throw new Error('GameStateTemplate ainda não carregado');
+      }
+  
+      this.state = structuredClone(template);
+    }
+  
     return this.state;
   }
 

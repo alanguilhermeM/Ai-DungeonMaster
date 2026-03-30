@@ -12,6 +12,9 @@
   "discoveredClues": [],
   "npcStates": {},
   "worldState": {
-    "hospital": "normal"
+    "hospital": "normal",
+    "time": "noite",
+    "weather": "limpo",
+    "dangerLevel": 1
   }
 }

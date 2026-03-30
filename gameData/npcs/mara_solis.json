@@ -1,0 +1,14 @@
+{
+  "id": "mara_solis",
+  "name": "Maria Solis",
+  "role": "Paciente internada",
+  "location": "hospital_enfermaria",
+  "personality": ["reservada", "silenciosa", "observadora"],
+  "appearance": "Mulher jovem, pele muito pálida, cabelos negros e olhos profundamente cansados.",
+  "secret": "Deixou seus amigos pra trás pra sobreviver.",
+  "interactions": ["talk"],
+  "quests": [],
+  "relationships": {
+    "clara_valen": "amigavel"
+  }
+}

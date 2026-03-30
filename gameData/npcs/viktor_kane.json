@@ -1,0 +1,15 @@
+{
+  "id": "viktor_kane",
+  "name": "Viktor Kane",
+  "role": "Segurança do hospital",
+  "location": "hospital_corredor_segundo_andar",
+  "personality": ["Direto", "Engraçadinho", "Responsavel"],
+  "appearance": "Homem alto e forte, cerca de 40 anos, cabeça raspada e uma cicatriz no rosto.",
+  "secret": "Já foi ativo em um forte grupo de ataque como suporte.",
+  "interactions": ["talk", "ask_help", "question"],
+  "quests": ["investigar_paciente"],
+  "relationships": {
+    "clara_valen": "respeito",
+    "elias_verdan": "confiança"
+  }
+}

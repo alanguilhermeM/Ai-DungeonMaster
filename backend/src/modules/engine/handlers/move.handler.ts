@@ -1,5 +1,5 @@
-
-export const handleMove = (parsedAction, state: any, resolveLocationTarget, gameData) => {
+export const handleMove = (parsedAction, state: any, services: any) => {
+  const { gameData, resolveLocationTarget } = services;
   const currentLocation = gameData.getLocation(state.currentLocation);
 
   if (!currentLocation) {
@@ -15,8 +15,20 @@ export const handleMove = (parsedAction, state: any, resolveLocationTarget, game
     };
   }
 
-  const resolved = resolveLocationTarget(target);
+  if (target === 'back') {
+    const previous = state.previousLocation;
 
+    if (!previous) {
+      return { type: 'INVALID_MOVE' };
+    }
+
+    return {
+      type: 'MOVE',
+      target: previous,
+    };
+  }
+
+  const resolved = resolveLocationTarget(target);
   if (!resolved || !possibleMoves.includes(resolved)) {
     return {
       type: 'INVALID_MOVE',

@@ -6,5 +6,5 @@
   "npcs": [],
   "connections": ["hospital_enfermaria", "hospital_quarto_203"],
   "items": [],
-  "events": []
+  "events": ["paciente_desaparecido"]
 }
