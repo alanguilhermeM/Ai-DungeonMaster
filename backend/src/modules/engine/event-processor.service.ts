@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { GameDataService } from '../gamedata/gamedata.service';
-import { stat } from 'fs';
 
 @Injectable()
 export class EventProcessorService {
@@ -28,9 +27,7 @@ export class EventProcessorService {
         this.checkConditions(event, state),
     );
 
-    console.log(validEvents);
-
-    return validEvents[0] || null;
+    return validEvents || null;
   }
 
   checkTrigger(event, actionResult): boolean {
@@ -54,7 +51,6 @@ export class EventProcessorService {
   checkConditions(event, state) {
     const conditions = event.conditions;
     if (!conditions) return true;
-    // console.log(state)
 
     for (const condition in conditions)
       switch (condition) {
@@ -65,7 +61,28 @@ export class EventProcessorService {
           if (state.completedEvents.includes(event.id)) return false;
           break;
       }
-    // console.log(conditions);
     return true;
+  }
+
+  applyEffects(event, state) {
+    if (!event || !event.effects) return state;
+    const effects = event.effects;
+    if (effects.addClues) {
+      effects.addClues.forEach((clue) => {
+        if (!state.discoveredClues.includes(clue)) {
+          state.discoveredClues.push(clue);
+        }
+      });
+    }
+
+    if (effects.updateWorld) {
+      Object.entries(effects.updateWorld).forEach(([key, value]) => {
+        state.worldState[key] = value;
+      });
+    }
+
+    if (!state.completedEvents.includes(event.id)) {
+      state.completedEvents.push(event.id);
+    }
   }
 }

@@ -12,7 +12,11 @@
     "notCompleted": true
   },
 
-  "description": "Um paciente desapareceu sem deixar rastros.",
+  "description": [
+    "Um paciente desapareceu sem deixar rastros.",
+    "Algo estranho aconteceu, um paciente sumiu",
+    "O hospital entra em alerta após um desaparecimento"
+  ],
 
   "effects": {
     "addClues": ["pista_corredor"],
