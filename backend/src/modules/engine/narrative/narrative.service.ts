@@ -6,13 +6,17 @@ export class NarrativeService {
   constructor(private readonly gameData: GameDataService) {}
 
   generateNarrative(result: any, state, events: any) {
-    const base = this.buildBaseNarrative(result)
+    const base = this.buildBaseNarrative(result);
     const eventText = this.buildEventsNarrative(events);
-    const worldText = this.buildWorldNarrative(state);
+    const worldNarrative = state.pendingNarratives
 
-    return [base, eventText, worldText]
-      .filter(Boolean)
-      .join('\n\n')
+    if(worldNarrative.length > 0) {
+      const narrative = [base, eventText, worldNarrative.join('\n\n')].filter(Boolean).join('\n\n');
+      state.pendingNarratives = []
+      return narrative
+    }
+
+    return [base, eventText].filter(Boolean).join('\n\n');
   }
 
   private buildBaseNarrative(result) {
@@ -28,9 +32,10 @@ export class NarrativeService {
         const variations = [
           `Você se move para ${location.name}`,
           `Você caminha até ${location.name}`,
-          `Você segue em direção a ${location.name}`
+          `Você segue em direção a ${location.name}`,
         ];
-        const random = variations[Math.floor(Math.random() * variations.length)];
+        const random =
+          variations[Math.floor(Math.random() * variations.length)];
 
         baseNarrative = location
           ? random
@@ -64,22 +69,30 @@ export class NarrativeService {
     let eventsNarrative = '';
 
     if (events && events.length > 0) {
-      eventsNarrative = events.map((event) => {
-        const random = event.description[Math.floor(Math.random() * event.description.length)];
-        return random;
-      }).join('\n');
+      eventsNarrative = events
+        .map((event) => {
+          const random =
+            event.description[
+              Math.floor(Math.random() * event.description.length)
+            ];
+          return random;
+        })
+        .join('\n');
     }
 
     return eventsNarrative;
   }
 
-  private buildWorldNarrative(state) {
-    let worldNarrative = '';
+  buildWorldNarrative(key: string, value: string) {
+    if (key === 'hospital') {
+      if (value === 'suspeita') {
+        let worldNarrative =
+          'O clima no hospital está estranho, como se algo estivesse errado.';
 
-    if (state.worldState.hospital = "suspeita") {
-      worldNarrative = "O clima no hospital está estranho, como se algo estivesse errado."
+        return worldNarrative;
+      }
     }
 
-    return worldNarrative
+    return undefined;
   }
 }

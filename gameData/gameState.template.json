@@ -11,8 +11,10 @@
   "completedQuests": [],
   "discoveredClues": [],
   "npcStates": {},
+  "pendingNarratives": [],
   "worldState": {
     "hospital": "normal",
+    "previousHospital": "normal",
     "time": "noite",
     "weather": "limpo",
     "dangerLevel": 1

@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { GameDataService } from '../gamedata/gamedata.service';
+import { NarrativeService } from './narrative/narrative.service';
 
 @Injectable()
 export class EventProcessorService {
-  constructor(private readonly gameData: GameDataService) {}
+  constructor(private readonly gameData: GameDataService, private readonly narrative: NarrativeService) {}
   processor(state: any, actionResult) {
     const currentLocation = state.currentLocation;
     const location = this.gameData.getLocation(currentLocation);
@@ -76,8 +77,14 @@ export class EventProcessorService {
     }
 
     if (effects.updateWorld) {
-      Object.entries(effects.updateWorld).forEach(([key, value]) => {
-        state.worldState[key] = value;
+      Object.entries(effects.updateWorld).forEach(([key, value]: [string, string]) => {
+        let prev = state.worldState[key]
+        if (prev !== value) {
+          state.worldState[key] = value;
+          const worldNarrative = this.narrative.buildWorldNarrative(key, value);
+          worldNarrative ? state.pendingNarratives.push(worldNarrative) : null;
+          console.log(state);
+        }
       });
     }
 
