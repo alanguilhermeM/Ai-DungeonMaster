@@ -2,6 +2,8 @@
   "id": "paciente_em_panico",
   "name": "Paciente em Pânico",
 
+  "scope": "talk",
+
   "trigger": {
     "type": "TALK",
     "target": "hospital_enfermaria"

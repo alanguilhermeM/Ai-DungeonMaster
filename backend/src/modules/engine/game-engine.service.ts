@@ -10,7 +10,7 @@ import { EventProcessorService } from './event-processor.service';
 export class GameEngineService {
   constructor(
     private readonly stateManager: StateManagerService,
-    private readonly gameData: GameDataService,
+    // private readonly gameData: GameDataService,
     private readonly parseAction: ActionParserService,
     private readonly narrative: NarrativeService,
     private readonly resolveAction: ActionResolve,
@@ -25,8 +25,7 @@ export class GameEngineService {
     const newState = this.stateManager.updateState(result);
 
     const events = this.eventProcessor
-      .processor(newState, result)
-      .filter((event) => !newState.completedEvents.includes(event.id));
+      .processor(newState, result);
 
     events.forEach((event) => {
       this.eventProcessor.applyEffects(event, newState);

@@ -1,0 +1,27 @@
+{
+  "id": "hospital_piora",
+  "name": "Situação piora no hospital",
+
+  "scope": "global",
+
+  "trigger": {
+    "type": "MOVE"
+  },
+
+  "conditions": {
+    "hospital": "suspeita",
+    "notCompleted": true
+  },
+
+  "description": [
+    "O clima piora drasticamente no hospital.",
+    "A tensão aumenta, algo claramente está errado.",
+    "O hospital parece mais perigoso agora."
+  ],
+
+  "effects": {
+    "updateWorld": {
+      "hospital": "perigo"
+    }
+  }
+}

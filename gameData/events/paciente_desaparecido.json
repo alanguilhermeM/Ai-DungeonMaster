@@ -2,6 +2,8 @@
   "id": "paciente_desaparecido",
   "name": "Paciente Desaparecido",
 
+  "scope": "location",
+
   "trigger": {
     "type": "MOVE",
     "target": "hospital_corredor_segundo_andar"

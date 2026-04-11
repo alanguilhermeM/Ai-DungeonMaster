@@ -4,31 +4,43 @@ import { NarrativeService } from './narrative/narrative.service';
 
 @Injectable()
 export class EventProcessorService {
-  constructor(private readonly gameData: GameDataService, private readonly narrative: NarrativeService) {}
+  constructor(
+    private readonly gameData: GameDataService,
+    private readonly narrative: NarrativeService,
+  ) {}
   processor(state: any, actionResult) {
     const currentLocation = state.currentLocation;
-    const location = this.gameData.getLocation(currentLocation);
-
-    const locationEvents = location?.events || [];
-
     const events = this.gameData.getEvents();
-    const eventKeys = Object.keys(events);
 
-    const eventsArray = locationEvents.filter((eventId) =>
-      eventKeys.includes(eventId),
-    );
+    const locationEvents = this.getLocationEvents(currentLocation, events);
+    const globalEvents = this.getGlobalEvents(events);
+    const allEvents = [...locationEvents, ...globalEvents];
 
-    const newEventsArray = eventsArray.map((eventId) =>
-      this.gameData.getEvent(eventId),
-    );
-
-    const validEvents = newEventsArray.filter(
+    const validEvents = allEvents.filter(
       (event) =>
         this.checkTrigger(event, actionResult) &&
         this.checkConditions(event, state),
     );
 
-    return validEvents || null;
+    return validEvents || [];
+  }
+
+  getLocationEvents(currentLocation, events) {
+    const location = this.gameData.getLocation(currentLocation);
+    const eventsLocation = (location?.events || [])
+      .map((eventId) => events[eventId])
+      .filter(Boolean);
+
+    return eventsLocation;
+  }
+
+  getGlobalEvents(events) {
+    const eventsValue = Object.values(events);
+    const globalEvents = eventsValue.filter((event: any) =>
+      event.scope.includes('global'),
+    );
+
+    return globalEvents;
   }
 
   checkTrigger(event, actionResult): boolean {
@@ -77,15 +89,22 @@ export class EventProcessorService {
     }
 
     if (effects.updateWorld) {
-      Object.entries(effects.updateWorld).forEach(([key, value]: [string, string]) => {
-        let prev = state.worldState[key]
-        if (prev !== value) {
-          state.worldState[key] = value;
-          const worldNarrative = this.narrative.buildWorldNarrative(key, value);
-          worldNarrative ? state.pendingNarratives.push(worldNarrative) : null;
-          console.log(state);
-        }
-      });
+      Object.entries(effects.updateWorld).forEach(
+        ([key, value]: [string, string]) => {
+          let prev = state.worldState[key];
+          if (prev !== value) {
+            state.worldState[key] = value;
+            const worldNarrative = this.narrative.buildWorldNarrative(
+              key,
+              value,
+            );
+            worldNarrative
+              ? state.pendingNarratives.push(worldNarrative)
+              : null;
+            // console.log(state);
+          }
+        },
+      );
     }
 
     if (!state.completedEvents.includes(event.id)) {
