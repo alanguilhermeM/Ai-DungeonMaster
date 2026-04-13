@@ -10,7 +10,6 @@ import { EventProcessorService } from './event-processor.service';
 export class GameEngineService {
   constructor(
     private readonly stateManager: StateManagerService,
-    // private readonly gameData: GameDataService,
     private readonly parseAction: ActionParserService,
     private readonly narrative: NarrativeService,
     private readonly resolveAction: ActionResolve,
@@ -24,15 +23,52 @@ export class GameEngineService {
     const result = this.resolveAction.resolve(parsedAction, currentState);
     const newState = this.stateManager.updateState(result);
 
-    const events = this.eventProcessor
-      .processor(newState, result);
+    const events = this.eventProcessor.processor(newState, result);
 
-    events.forEach((event) => {
+    const executedEvents = [];
+
+    const pendingEvents = newState.pendingEvents;
+    const locationEvents = events.location;
+    const actionEvents = events.action;
+    const globalImmediateEvents = events.global.filter((event) =>
+      event.timing === 'immediate',
+    );
+    const globalNextTurnEvents = events.global.filter((event) =>
+      event.timing === 'next_turn',
+    );
+
+    pendingEvents.forEach((event) => {
       this.eventProcessor.applyEffects(event, newState);
+      executedEvents.push(event);
     });
-    // console.log(this.stateManager.getState());
 
-    const story = this.narrative.generateNarrative(result, newState, events);
+    newState.pendingEvents = []
+
+    locationEvents.forEach((event) => {
+      this.eventProcessor.applyEffects(event, newState);
+      executedEvents.push(event);
+    });
+
+    actionEvents.forEach((event) => {
+      this.eventProcessor.applyEffects(event, newState);
+      executedEvents.push(event)
+    });
+
+    if (globalImmediateEvents.length > 0) {
+      globalImmediateEvents.forEach((event) => {
+        this.eventProcessor.applyEffects(event, newState);
+        executedEvents.push(event);
+      });
+    }
+//
+    if(globalNextTurnEvents.length > 0) {
+      globalNextTurnEvents.forEach((event) => {
+        newState.pendingEvents.push(event)
+        newState.completedEvents.push(event.id)
+      });
+    }
+
+    const story = this.narrative.generateNarrative(result, newState, executedEvents);
 
     return {
       story,

@@ -23,5 +23,7 @@
     "updateWorld": {
       "hospital": "perigo"
     }
-  }
+  },
+
+  "timing": "next_turn"
 }

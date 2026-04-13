@@ -25,5 +25,7 @@
     "updateWorld": {
       "hospital": "suspeita"
     }
-  }
+  },
+
+  "timing": "immediate"
 }

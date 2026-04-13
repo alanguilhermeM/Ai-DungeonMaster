@@ -9,7 +9,8 @@ export class EventProcessorService {
     private readonly narrative: NarrativeService,
   ) {}
   processor(state: any, actionResult) {
-    const currentLocation = state.currentLocation;
+    const snapshot = structuredClone(state);
+    const currentLocation = snapshot.currentLocation;
     const events = this.gameData.getEvents();
 
     const locationEvents = this.getLocationEvents(currentLocation, events);
@@ -19,10 +20,30 @@ export class EventProcessorService {
     const validEvents = allEvents.filter(
       (event) =>
         this.checkTrigger(event, actionResult) &&
-        this.checkConditions(event, state),
+        this.checkConditions(event, snapshot),
     );
 
-    return validEvents || [];
+    const validEventsByScope = validEvents.reduce((acc, event) => {
+      if (event.scope.includes('location')) {
+        acc.location.push(event)
+      }
+    
+      if (event.scope.includes('global')) {
+        acc.global.push(event)
+      }
+
+      if (event.scope.includes('action')) {
+        acc.global.push(event)
+      }
+    
+      return acc
+    }, {
+      location: [],
+      global: [],
+      action: []
+    });
+
+    return validEventsByScope || [];
   }
 
   getLocationEvents(currentLocation, events) {

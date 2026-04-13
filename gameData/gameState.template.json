@@ -12,6 +12,7 @@
   "discoveredClues": [],
   "npcStates": {},
   "pendingNarratives": [],
+  "pendingEvents": [],
   "worldState": {
     "hospital": "normal",
     "time": "noite",
