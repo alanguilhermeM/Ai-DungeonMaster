@@ -27,22 +27,21 @@ export class GameEngineService {
 
     const executedEvents = [];
 
-    const pendingEvents = newState.pendingEvents;
     const locationEvents = events.location;
     const actionEvents = events.action;
-    const globalImmediateEvents = events.global.filter((event) =>
-      event.timing === 'immediate',
-    );
-    const globalNextTurnEvents = events.global.filter((event) =>
-      event.timing === 'next_turn',
+    const globalImmediateEvents = events.global.filter(
+      (event) => event.timing === 'immediate',
     );
 
-    pendingEvents.forEach((event) => {
+    const pending = [...newState.pendingEvents];
+    newState.pendingEvents = [];
+
+    pending.forEach((event) => {
       this.eventProcessor.applyEffects(event, newState);
       executedEvents.push(event);
     });
 
-    newState.pendingEvents = []
+    newState.pendingEvents = [];
 
     locationEvents.forEach((event) => {
       this.eventProcessor.applyEffects(event, newState);
@@ -51,7 +50,7 @@ export class GameEngineService {
 
     actionEvents.forEach((event) => {
       this.eventProcessor.applyEffects(event, newState);
-      executedEvents.push(event)
+      executedEvents.push(event);
     });
 
     if (globalImmediateEvents.length > 0) {
@@ -60,15 +59,24 @@ export class GameEngineService {
         executedEvents.push(event);
       });
     }
-//
-    if(globalNextTurnEvents.length > 0) {
-      globalNextTurnEvents.forEach((event) => {
-        newState.pendingEvents.push(event)
-        newState.completedEvents.push(event.id)
-      });
-    }
 
-    const story = this.narrative.generateNarrative(result, newState, executedEvents);
+    const postEvents = this.eventProcessor.processor(newState, result);
+
+    const nextTurnEvents = postEvents.global.filter(
+      (event) => event.timing === 'next_turn',
+    );
+
+    nextTurnEvents.forEach((event) => {
+      if (!newState.pendingEvents.find((e) => e.id === event.id)) {
+        newState.pendingEvents.push(event);
+      }
+    });
+
+    const story = this.narrative.generateNarrative(
+      result,
+      newState,
+      executedEvents,
+    );
 
     return {
       story,

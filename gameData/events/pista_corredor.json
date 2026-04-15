@@ -1,0 +1,28 @@
+{
+  "id": "pista_corredor",
+  "name": "Pista Corredor",
+
+  "scope": "action",
+
+  "trigger": {
+    "type": "LOOK"
+  },
+
+  "conditions": {
+    "location": "hospital_corredor_segundo_andar",
+    "notCompleted": true
+  },
+
+  "description": [
+    "Você investiga o corredor e vê uma brecha na parede de onde escorre um liquido viscoso e escuro, ao se aproximar e investigar você encontra algo que parece ser uma caneta coberta de sangue"
+  ],
+
+  "effects": {
+    "addClues": ["pista_corredor"],
+    "updateWorld": {
+      "hospital": "suspeita"
+    }
+  },
+
+  "timing": "immediate"
+}

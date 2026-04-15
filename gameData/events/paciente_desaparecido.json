@@ -21,7 +21,6 @@
   ],
 
   "effects": {
-    "addClues": ["pista_corredor"],
     "updateWorld": {
       "hospital": "suspeita"
     }

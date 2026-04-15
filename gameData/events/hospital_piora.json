@@ -4,12 +4,11 @@
 
   "scope": "global",
 
-  "trigger": {
-    "type": "MOVE"
-  },
+  "trigger": {},
 
   "conditions": {
     "hospital": "suspeita",
+    "hasClue": "pista_corredor",
     "notCompleted": true
   },
 

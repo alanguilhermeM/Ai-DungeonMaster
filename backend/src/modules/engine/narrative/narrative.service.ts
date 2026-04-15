@@ -6,7 +6,7 @@ export class NarrativeService {
   constructor(private readonly gameData: GameDataService) {}
 
   generateNarrative(result: any, state, events: any) {
-    const base = this.buildBaseNarrative(result);
+    const base = this.buildBaseNarrative(result, state);
     const eventText = this.buildEventsNarrative(events);
     const worldNarrative = state.pendingNarratives
 
@@ -19,7 +19,7 @@ export class NarrativeService {
     return [base, eventText].filter(Boolean).join('\n\n');
   }
 
-  private buildBaseNarrative(result) {
+  private buildBaseNarrative(result, state) {
     let baseNarrative = '';
 
     switch (result.type) {
@@ -43,7 +43,7 @@ export class NarrativeService {
         break;
 
       case 'TALK':
-        baseNarrative = `Você começa a conversar com ${result.npc.name}`;
+        baseNarrative = this.buildTalkNarrative(result, state);
         break;
 
       case 'INVALID_MOVE':
@@ -94,5 +94,25 @@ export class NarrativeService {
     }
 
     return undefined;
+  }
+
+  buildTalkNarrative(result, state) {
+    const npcTarget = result.npc;
+    const hospitalState = state.worldState.hospital;
+    const time = state.worldState.time;
+    const keys = [
+      `hospital_${hospitalState}_time_${time}`,
+      `hospital_${hospitalState}`,
+      `time_${time}`,
+      "default"
+    ]
+
+    for (const key of keys) {
+      if(npcTarget.dialogues[key]) {
+        const dialogue = npcTarget.dialogues[key][(Math.floor(Math.random() * npcTarget.dialogues[key].length))];
+        console.log(dialogue)
+        return dialogue
+      }
+    }
   }
 }

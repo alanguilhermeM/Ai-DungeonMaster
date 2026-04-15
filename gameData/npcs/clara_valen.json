@@ -7,6 +7,14 @@
   "appearance": "Mulher de 32 anos, cabelo preso, postura firme.",
   "secret": "É apaixonada pelo diretor do hospital",
   "interactions": ["talk", "ask_help", "question"],
+  "dialogues": {
+    "default": [
+      "Clara observa você com atenção.",
+      "Ela parece ocupada, mas responde educadamente."
+    ],
+    "hospital_suspeita": ["Clara parece tensa. 'Algo não está certo aqui...'"],
+    "hospital_perigo": ["Clara parece nervosa. 'Algo está acontecendo, não tenho tempo pra conversar agora'"]
+  },
   "quests": ["medicamento_desaparecido"],
   "relationships": {
     "elias_verdan": "paixão",

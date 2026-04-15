@@ -9,13 +9,14 @@ export class EventProcessorService {
     private readonly narrative: NarrativeService,
   ) {}
   processor(state: any, actionResult) {
-    const snapshot = structuredClone(state);
+    const snapshot = state;
     const currentLocation = snapshot.currentLocation;
     const events = this.gameData.getEvents();
 
     const locationEvents = this.getLocationEvents(currentLocation, events);
     const globalEvents = this.getGlobalEvents(events);
-    const allEvents = [...locationEvents, ...globalEvents];
+    const actionEvents = this.getActionEvents(events);
+    const allEvents = [...locationEvents, ...globalEvents, ...actionEvents];
 
     const validEvents = allEvents.filter(
       (event) =>
@@ -23,25 +24,28 @@ export class EventProcessorService {
         this.checkConditions(event, snapshot),
     );
 
-    const validEventsByScope = validEvents.reduce((acc, event) => {
-      if (event.scope.includes('location')) {
-        acc.location.push(event)
-      }
-    
-      if (event.scope.includes('global')) {
-        acc.global.push(event)
-      }
+    const validEventsByScope = validEvents.reduce(
+      (acc, event) => {
+        if (event.scope.includes('location')) {
+          acc.location.push(event);
+        }
 
-      if (event.scope.includes('action')) {
-        acc.global.push(event)
-      }
-    
-      return acc
-    }, {
-      location: [],
-      global: [],
-      action: []
-    });
+        if (event.scope.includes('global')) {
+          acc.global.push(event);
+        }
+
+        if (event.scope.includes('action')) {
+          acc.action.push(event);
+        }
+
+        return acc;
+      },
+      {
+        location: [],
+        global: [],
+        action: [],
+      },
+    );
 
     return validEventsByScope || [];
   }
@@ -64,32 +68,57 @@ export class EventProcessorService {
     return globalEvents;
   }
 
+  getActionEvents(events) {
+    const eventsValue = Object.values(events);
+    const actionEvents = eventsValue.filter((event: any) =>
+      event.scope.includes('action'),
+    );
+
+    return actionEvents;
+  }
+
   checkTrigger(event, actionResult): boolean {
     const trigger = event.trigger;
-
+  
+    if (!trigger || !trigger.type) return true;
+  
     if (actionResult.type !== trigger.type) {
       return false;
     }
-
+  
     if (!trigger.target) {
       return true;
     }
-
-    if (actionResult.target === trigger.target) {
-      return true;
-    }
-
-    return false;
+  
+    return actionResult.target === trigger.target;
   }
 
   checkConditions(event, state) {
     const conditions = event.conditions;
+
     if (!conditions) return true;
 
     for (const condition in conditions)
       switch (condition) {
+        case 'hospital':
+          if (conditions[condition] !== state.worldState.hospital) return false;
+          break;
         case 'time':
           if (conditions[condition] !== state.worldState.time) return false;
+          break;
+        case 'hasClue':
+          const value = conditions[condition];
+          if (Array.isArray(value)) {
+            const hasAll = value.every((clue) =>
+              state.discoveredClues.includes(clue),
+            );
+            if (!hasAll) return false;
+          } else {
+            if (!state.discoveredClues.includes(value)) return false;
+          }
+          break;
+        case 'location':
+          if (conditions[condition] !== state.currentLocation) return false;
           break;
         case 'notCompleted':
           if (state.completedEvents.includes(event.id)) return false;
@@ -101,6 +130,7 @@ export class EventProcessorService {
   applyEffects(event, state) {
     if (!event || !event.effects) return state;
     const effects = event.effects;
+
     if (effects.addClues) {
       effects.addClues.forEach((clue) => {
         if (!state.discoveredClues.includes(clue)) {
@@ -122,7 +152,6 @@ export class EventProcessorService {
             worldNarrative
               ? state.pendingNarratives.push(worldNarrative)
               : null;
-            // console.log(state);
           }
         },
       );
