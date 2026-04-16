@@ -3,6 +3,7 @@
   "name": "Situação piora no hospital",
 
   "scope": "global",
+  "priority": 95,
 
   "trigger": {},
 

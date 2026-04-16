@@ -3,6 +3,7 @@
   "name": "Paciente em Pânico",
 
   "scope": "action",
+  "priority": 40,
 
   "trigger": {
     "type": "TALK",

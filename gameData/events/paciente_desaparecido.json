@@ -3,6 +3,7 @@
   "name": "Paciente Desaparecido",
 
   "scope": "location",
+  "priority": 90,
 
   "trigger": {
     "type": "MOVE",

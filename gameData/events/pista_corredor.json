@@ -3,6 +3,7 @@
   "name": "Pista Corredor",
 
   "scope": "action",
+  "priority": 80,
 
   "trigger": {
     "type": "LOOK"

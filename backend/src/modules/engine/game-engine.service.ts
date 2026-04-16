@@ -25,16 +25,31 @@ export class GameEngineService {
 
     const events = this.eventProcessor.processor(newState, result);
 
+    const nextTurnEvents = events.global.filter(
+      (event) => event.timing === 'next_turn',
+    );
+    const nextTurnEventsByPriority = this.filterEventsByPriority(nextTurnEvents)
+
+    nextTurnEventsByPriority.forEach((event) => {
+      if (!newState.pendingEvents.find((e) => e.id === event.id)) {
+        newState.pendingEvents.push(event);
+      }
+    });
+
     const executedEvents = [];
 
     const locationEvents = events.location;
+    const locationEventsByMaxPriority = this.filterEventsByPriority(locationEvents);
+
     const actionEvents = events.action;
+    const actionEventsByMaxPriority = this.filterEventsByPriority(actionEvents);
+
     const globalImmediateEvents = events.global.filter(
       (event) => event.timing === 'immediate',
     );
+    const globalImmediateEventsByMaxPriority = this.filterEventsByPriority(globalImmediateEvents);
 
     const pending = [...newState.pendingEvents];
-    newState.pendingEvents = [];
 
     pending.forEach((event) => {
       this.eventProcessor.applyEffects(event, newState);
@@ -43,34 +58,22 @@ export class GameEngineService {
 
     newState.pendingEvents = [];
 
-    locationEvents.forEach((event) => {
+    locationEventsByMaxPriority.forEach((event) => {
       this.eventProcessor.applyEffects(event, newState);
       executedEvents.push(event);
     });
 
-    actionEvents.forEach((event) => {
+    actionEventsByMaxPriority.forEach((event) => {
       this.eventProcessor.applyEffects(event, newState);
       executedEvents.push(event);
     });
 
-    if (globalImmediateEvents.length > 0) {
-      globalImmediateEvents.forEach((event) => {
+    if (globalImmediateEventsByMaxPriority.length > 0) {
+      globalImmediateEventsByMaxPriority.forEach((event) => {
         this.eventProcessor.applyEffects(event, newState);
         executedEvents.push(event);
       });
     }
-
-    const postEvents = this.eventProcessor.processor(newState, result);
-
-    const nextTurnEvents = postEvents.global.filter(
-      (event) => event.timing === 'next_turn',
-    );
-
-    nextTurnEvents.forEach((event) => {
-      if (!newState.pendingEvents.find((e) => e.id === event.id)) {
-        newState.pendingEvents.push(event);
-      }
-    });
 
     const story = this.narrative.generateNarrative(
       result,
@@ -82,5 +85,13 @@ export class GameEngineService {
       story,
       gameState: newState,
     };
+  }
+
+  private filterEventsByPriority(events) {
+    if (events.length === 0) return [];
+    const priorities = events.map(event => event.priority);
+    const maxPriority = Math.max(...priorities);
+    const filterEvents = events.filter((event) => event.priority === maxPriority)
+    return filterEvents;
   }
 }
