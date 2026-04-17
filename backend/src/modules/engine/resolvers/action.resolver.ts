@@ -29,7 +29,9 @@ export class ActionResolve {
           gameData: this.gameData,
           resolveNpcTarget: this.resolveNpc.resolveNpcTarget,
         });
+      case 'USE':
 
+        // console.log(this.resolveLocation.)
       case 'INVALID_ACTION':
         return { type: 'INVALID_ACTION' };
 

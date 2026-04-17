@@ -1,6 +1,6 @@
 {
-  "id": "pista_corredor",
-  "name": "Pista Corredor",
+  "id": "encontrar_caneta",
+  "name": "Encontrar caneta",
 
   "scope": "action",
   "priority": 80,
@@ -15,11 +15,11 @@
   },
 
   "description": [
-    "Você investiga o corredor e vê uma brecha na parede de onde escorre um liquido viscoso e escuro, ao se aproximar e investigar você encontra algo que parece ser uma caneta coberta de sangue"
+    "Você investiga o corredor e vê uma brecha na parede de onde escorre um liquido viscoso e escuro, ao se aproximar e investigar você encontra algo que parece ser uma caneta suja de sangue"
   ],
 
   "effects": {
-    "addClues": ["pista_corredor"],
+    "addClues": ["caneta_suja"],
     "updateWorld": {
       "hospital": "suspeita"
     }

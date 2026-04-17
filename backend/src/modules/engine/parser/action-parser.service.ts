@@ -7,11 +7,14 @@ export class ActionParserService {
       aliases: ['olhar', 'observar', 'ver', 'examinar', 'analisar'],
     },
     MOVE: {
-      aliases: ['ir', 'andar', 'caminhar', 'vou', 'mover', 'voltar'],
+      aliases: ['andar', 'caminhar', 'vou', 'mover', 'voltar'],
     },
     TALK: {
       aliases: ['falar', 'dizer', 'conversar', 'dialogar', 'comunicar'],
     },
+    USE: {
+      aliases: ['usar', 'utilizar', 'manusear', 'manejar'],
+    }
   };
 
   parse(action: string) {
@@ -51,9 +54,30 @@ export class ActionParserService {
           input: action,
         };
       }
-      case 'LOOK':
+      case 'LOOK': {
         return { type: 'LOOK', input: action };
-
+      }
+      case 'USE': {
+        const phrase = normalized
+          .replace(/usar|manusear|utilizar|manejar/g, '')
+          .trim();
+      
+        const parts = phrase.split(/\b(?:na|no|em|nos|nas)\b/);
+      
+        if (parts.length < 2) {
+          return { type: 'INVALID_ACTION', input: action };
+        }
+      
+        const item = parts[0].trim();
+        const target = parts[1].trim();
+      
+        return {
+          type: 'USE',
+          item,
+          target,
+          input: action,
+        };
+      }
       default:
         return { type: 'INVALID_ACTION', input: action };
     }

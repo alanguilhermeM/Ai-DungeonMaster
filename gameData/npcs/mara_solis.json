@@ -6,9 +6,20 @@
   "personality": ["reservada", "silenciosa", "observadora"],
   "appearance": "Mulher jovem, pele muito pálida, cabelos negros e olhos profundamente cansados.",
   "secret": "Deixou seus amigos pra trás pra sobreviver.",
-  "interactions": ["talk"],
+  "interactions": ["talk", "partnership"],
+  "dialogues": {
+    "default": [
+      "O que foi?!",
+      "Perdeu algo na minha cara?"
+    ],
+    "hospital_suspeita": ["Mara ou não percebeu ou não se importa com o clima tenso no ar."],
+    "hospital_perigo": [
+      "Melhor que algo esteja mesmo acontecendo e que possa me dar a paz que tanto busco!"
+    ]
+  },
   "quests": [],
   "relationships": {
-    "clara_valen": "amigavel"
+    "clara_valen": "amigavel",
+    "adrian_holt": "descaso"
   }
 }

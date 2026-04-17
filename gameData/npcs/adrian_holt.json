@@ -1,0 +1,24 @@
+{
+  "id": "adrian_holt",
+  "name": "Adrian Holt",
+  "role": "Médico Residente",
+  "location": "hospital_enfermaria",
+  "personality": ["disciplinado", "descontraido", "senso de dever"],
+  "appearance": "Um homem de 33 anos, magro, cabelos bagunçados e sempre com olheiras.",
+  "secret": "Está se preparando para ser um curandeiro em campos de batalha.",
+  "interactions": ["talk", "analise_object", "partnership"],
+  "dialogues": {
+    "default": [
+      "Em que posso ajuda-lo"
+    ],
+    "hospital_suspeita": ["Adrian não parece se importar com o clima tenso no ar. 'Não to com tempo pra essa merda.'"],
+    "hospital_perigo": [
+      "Adrian parece finalmente perceber a tensão aumentar. 'Se precisar de ajude me fale, é melhor ter alguém ao seu lado do que nada'"
+    ]
+  },
+  "quests": ["sair_do_hospital"],
+  "relationships": {
+    "elias_verdan": "Respeito mutuo",
+    "viktor_kane": "Indiferença"
+  }
+}

@@ -78,6 +78,7 @@ export class EventProcessorService {
   }
 
   checkTrigger(event, actionResult): boolean {
+    console.log(actionResult)
     const trigger = event.trigger;
   
     if (!trigger || !trigger.type) return true;
@@ -85,12 +86,16 @@ export class EventProcessorService {
     if (actionResult.type !== trigger.type) {
       return false;
     }
-  
-    if (!trigger.target) {
-      return true;
+
+    if (trigger.item && actionResult.item !== trigger.item) {
+      return false;
     }
   
-    return actionResult.target === trigger.target;
+    if (trigger.target && actionResult.target !== trigger.target) {
+      return false;
+    }
+  
+    return true;
   }
 
   checkConditions(event, state) {
@@ -130,6 +135,30 @@ export class EventProcessorService {
   applyEffects(event, state) {
     if (!event || !event.effects) return state;
     const effects = event.effects;
+
+    if(effects.removeItems) {
+      effects.removeItems.forEach((item) => {
+        if (state.player.inventory.includes(item)) {
+          state.player.inventory = state.player.inventory.filter(i => i !== item);
+        }
+      })
+    }
+
+    if(effects.removeClues) {
+      effects.removeClues.forEach((clue) => {
+        if (state.discoveredClues.includes(clue)) {
+          state.discoveredClues = state.discoveredClues.filter(c => c !== clue);
+        }
+      })
+    }
+
+    if(effects.addItems) {
+      effects.addItems.forEach((item) => {
+        if (!state.player.inventory.includes(item)) {
+          state.player.inventory.push(item);
+        }
+      });
+    }
 
     if (effects.addClues) {
       effects.addClues.forEach((clue) => {

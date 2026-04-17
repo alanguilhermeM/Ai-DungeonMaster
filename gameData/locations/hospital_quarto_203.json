@@ -2,9 +2,9 @@
   "id": "hospital_quarto_203",
   "name": "Quarto 203",
   "floor": "segundo_andar",
-  "description": "Quarto onde o jogador acorda, tem mais 2 leitos no quarto ocupado com pessoas.",
+  "description": "Quarto onde o jogador acorda, tem mais 2 leitos no quarto ocupado com pessoas e 1 banheiro.",
   "npcs": ["clara_valen"],
-  "connections": ["hospital_corredor_segundo_andar"],
+  "connections": ["hospital_corredor_segundo_andar", "hospital_banheiro_quarto_203"],
   "items": [],
   "events": []
 }

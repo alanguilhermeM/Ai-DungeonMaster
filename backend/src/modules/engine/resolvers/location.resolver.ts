@@ -12,6 +12,9 @@ export class LocationResolve {
     hospital_quarto_203: {
       aliases: ['quarto', 'quarto 203'],
     },
+    hospital_banheiro_quarto_203: {
+      aliases: ['banheiro', 'mictorio'],
+    },
   };
 
   resolveLocationTarget = (target: string) => {

@@ -1,0 +1,10 @@
+{
+  "id": "hospital_banheiro_quarto_203",
+  "name": "Banheiro",
+  "floor": "segundo_andar",
+  "description": "É um banheiro simples, uma privada, pia para lavar as mãos ou objetos, um espelho e uma banheira no canto com uma cortina",
+  "npcs": [],
+  "connections": ["hospital_quarto_203"],
+  "items": [],
+  "events": []
+}

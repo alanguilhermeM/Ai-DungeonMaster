@@ -1,0 +1,30 @@
+{
+  "id": "limpar_caneta",
+  "name": "Limpar a caneta suja",
+
+  "scope": "action",
+  "priority": 50,
+
+  "trigger": {
+    "type": "USE",
+    "item": "caneta",
+    "target": "pia"
+  },
+
+  "conditions": {
+    "location": "banheiro_103",
+    "hasClue": "caneta_suja",
+    "notCompleted": true
+  },
+
+  "description": [
+    "Você lava a caneta na pia. O sangue se dissolve e duas iniciais gravadas começam a aparecer: 'E.V'."
+  ],
+
+  "effects": {
+    "removeClues": ["caneta_suja"],
+    "addClues": ["iniciais_caneta"]
+  },
+
+  "timing": "immediate"
+}

@@ -3,7 +3,7 @@
   "name": "Enfermaria",
   "floor": "segundo_andar",
   "description": "Uma sala com vários leitos ocupados por pacientes.",
-  "npcs": ["clara_valen", "mara_solis"],
+  "npcs": ["adrian_holt", "mara_solis"],
   "connections": ["hospital_corredor_segundo_andar"],
   "items": [],
   "events": ["paciente_em_panico"]

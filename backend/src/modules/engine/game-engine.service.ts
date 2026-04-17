@@ -21,60 +21,16 @@ export class GameEngineService {
     const parsedAction = this.parseAction.parse(action);
 
     const result = this.resolveAction.resolve(parsedAction, currentState);
+    console.log(result)
     const newState = this.stateManager.updateState(result);
 
     const events = this.eventProcessor.processor(newState, result);
-
-    const nextTurnEvents = events.global.filter(
-      (event) => event.timing === 'next_turn',
-    );
-    const nextTurnEventsByPriority = this.filterEventsByPriority(nextTurnEvents)
-
-    nextTurnEventsByPriority.forEach((event) => {
-      if (!newState.pendingEvents.find((e) => e.id === event.id)) {
-        newState.pendingEvents.push(event);
-      }
-    });
-
     const executedEvents = [];
 
-    const locationEvents = events.location;
-    const locationEventsByMaxPriority = this.filterEventsByPriority(locationEvents);
-
-    const actionEvents = events.action;
-    const actionEventsByMaxPriority = this.filterEventsByPriority(actionEvents);
-
-    const globalImmediateEvents = events.global.filter(
-      (event) => event.timing === 'immediate',
-    );
-    const globalImmediateEventsByMaxPriority = this.filterEventsByPriority(globalImmediateEvents);
-
-    const pending = [...newState.pendingEvents];
-
-    pending.forEach((event) => {
-      this.eventProcessor.applyEffects(event, newState);
-      executedEvents.push(event);
-    });
-
-    newState.pendingEvents = [];
-
-    locationEventsByMaxPriority.forEach((event) => {
-      this.eventProcessor.applyEffects(event, newState);
-      executedEvents.push(event);
-    });
-
-    actionEventsByMaxPriority.forEach((event) => {
-      this.eventProcessor.applyEffects(event, newState);
-      executedEvents.push(event);
-    });
-
-    if (globalImmediateEventsByMaxPriority.length > 0) {
-      globalImmediateEventsByMaxPriority.forEach((event) => {
-        this.eventProcessor.applyEffects(event, newState);
-        executedEvents.push(event);
-      });
-    }
-
+    this.prePhase(newState, executedEvents);
+    this.mainPhase(newState, events, executedEvents);
+    this.postPhase(newState, result);
+  
     const story = this.narrative.generateNarrative(
       result,
       newState,
@@ -85,6 +41,61 @@ export class GameEngineService {
       story,
       gameState: newState,
     };
+  }
+
+  private prePhase(state, executedEvents) {
+    const pending = [...state.pendingEvents];
+
+    pending.forEach((event) => {
+      this.eventProcessor.applyEffects(event, state);
+      executedEvents.push(event);
+    });
+
+    state.pendingEvents = [];
+  }
+
+  private mainPhase(state, events, executedEvents) {
+    const locationEvents = events.location;
+    const locationEventsByMaxPriority = this.filterEventsByPriority(locationEvents);
+
+    const globalImmediateEvents = events.global.filter(
+      (event) => event.timing === 'immediate',
+    );
+    const globalImmediateEventsByMaxPriority = this.filterEventsByPriority(globalImmediateEvents);
+
+    const actionEvents = events.action;
+    const actionEventsByMaxPriority = this.filterEventsByPriority(actionEvents);
+
+    locationEventsByMaxPriority.forEach((event) => {
+      this.eventProcessor.applyEffects(event, state);
+      executedEvents.push(event);
+    });
+
+    actionEventsByMaxPriority.forEach((event) => {
+      this.eventProcessor.applyEffects(event, state);
+      executedEvents.push(event);
+    });
+
+    if (globalImmediateEventsByMaxPriority.length > 0) {
+      globalImmediateEventsByMaxPriority.forEach((event) => {
+        this.eventProcessor.applyEffects(event, state);
+        executedEvents.push(event);
+      });
+    }
+  }
+
+  private postPhase (state, result) {
+    const events = this.eventProcessor.processor(state, result);
+    const nextTurnEvents = events.global.filter(
+      (event) => event.timing === 'next_turn',
+    );
+    const nextTurnEventsByPriority = this.filterEventsByPriority(nextTurnEvents)
+
+    nextTurnEventsByPriority.forEach((event) => {
+      if (!state.pendingEvents.find((e) => e.id === event.id)) {
+        state.pendingEvents.push(event);
+      }
+    });
   }
 
   private filterEventsByPriority(events) {
