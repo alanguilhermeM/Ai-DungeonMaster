@@ -7,7 +7,7 @@ export class ActionParserService {
       aliases: ['olhar', 'observar', 'ver', 'examinar', 'analisar'],
     },
     MOVE: {
-      aliases: ['andar', 'caminhar', 'vou', 'mover', 'voltar'],
+      aliases: ['ir', 'andar', 'caminhar', 'vou', 'mover', 'voltar'],
     },
     TALK: {
       aliases: ['falar', 'dizer', 'conversar', 'dialogar', 'comunicar'],
@@ -32,8 +32,8 @@ export class ActionParserService {
         }
 
         const target = normalized
-          .replace(/ir|andar|caminhar|vou/g, '')
-          .replace('para', '')
+          .replace('\b(ir|andar|caminhar|vou)\b', '')
+          .replace(/para|ao|à|pro|vou/g, '')
           .trim();
 
         return {

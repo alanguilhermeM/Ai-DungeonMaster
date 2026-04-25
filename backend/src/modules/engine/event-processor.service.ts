@@ -78,11 +78,11 @@ export class EventProcessorService {
   }
 
   checkTrigger(event, actionResult): boolean {
-    console.log(actionResult)
+    // console.log(actionResult)
     const trigger = event.trigger;
-  
+
     if (!trigger || !trigger.type) return true;
-  
+
     if (actionResult.type !== trigger.type) {
       return false;
     }
@@ -90,11 +90,11 @@ export class EventProcessorService {
     if (trigger.item && actionResult.item !== trigger.item) {
       return false;
     }
-  
+
     if (trigger.target && actionResult.target !== trigger.target) {
       return false;
     }
-  
+
     return true;
   }
 
@@ -112,14 +112,25 @@ export class EventProcessorService {
           if (conditions[condition] !== state.worldState.time) return false;
           break;
         case 'hasClue':
-          const value = conditions[condition];
-          if (Array.isArray(value)) {
-            const hasAll = value.every((clue) =>
+          const valueC = conditions[condition];
+          if (Array.isArray(valueC)) {
+            const hasAll = valueC.every((clue) =>
               state.discoveredClues.includes(clue),
             );
             if (!hasAll) return false;
           } else {
-            if (!state.discoveredClues.includes(value)) return false;
+            if (!state.discoveredClues.includes(valueC)) return false;
+          }
+          break;
+        case 'hasItem':
+          const valueI = conditions[condition];
+          if (Array.isArray(valueI)) {
+            const hasAll = valueI.every((item) =>
+              state.player.inventory.includes(item),
+            );
+            if (!hasAll) return false;
+          } else {
+            if (!state.player.inventory.includes(valueI)) return false;
           }
           break;
         case 'location':
@@ -136,23 +147,27 @@ export class EventProcessorService {
     if (!event || !event.effects) return state;
     const effects = event.effects;
 
-    if(effects.removeItems) {
+    if (effects.removeItems) {
       effects.removeItems.forEach((item) => {
         if (state.player.inventory.includes(item)) {
-          state.player.inventory = state.player.inventory.filter(i => i !== item);
+          state.player.inventory = state.player.inventory.filter(
+            (i) => i !== item,
+          );
         }
-      })
+      });
     }
 
-    if(effects.removeClues) {
+    if (effects.removeClues) {
       effects.removeClues.forEach((clue) => {
         if (state.discoveredClues.includes(clue)) {
-          state.discoveredClues = state.discoveredClues.filter(c => c !== clue);
+          state.discoveredClues = state.discoveredClues.filter(
+            (c) => c !== clue,
+          );
         }
-      })
+      });
     }
 
-    if(effects.addItems) {
+    if (effects.addItems) {
       effects.addItems.forEach((item) => {
         if (!state.player.inventory.includes(item)) {
           state.player.inventory.push(item);

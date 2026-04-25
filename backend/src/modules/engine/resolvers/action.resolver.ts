@@ -5,6 +5,8 @@ import { handleTalk } from '../handlers/talk.handler';
 import { LocationResolve } from './location.resolver';
 import { NpcResolve } from './npc.resolver';
 import { GameDataService } from 'src/modules/gamedata/gamedata.service';
+import { UseResolve } from './use.resolver';
+import { handleUse } from '../handlers/use.handler';
 
 @Injectable()
 export class ActionResolve {
@@ -12,6 +14,7 @@ export class ActionResolve {
     readonly gameData: GameDataService,
     readonly resolveLocation: LocationResolve,
     readonly resolveNpc: NpcResolve,
+    readonly resolveUse: UseResolve
   ) {}
   resolve = (parsedAction: any, state: any) => {
     switch (parsedAction.type) {
@@ -30,8 +33,10 @@ export class ActionResolve {
           resolveNpcTarget: this.resolveNpc.resolveNpcTarget,
         });
       case 'USE':
-
-        // console.log(this.resolveLocation.)
+        return handleUse(parsedAction, state, {
+          gameData: this.gameData,
+          resolve: this.resolveUse.resolve,
+        })
       case 'INVALID_ACTION':
         return { type: 'INVALID_ACTION' };
 

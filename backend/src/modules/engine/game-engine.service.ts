@@ -21,7 +21,7 @@ export class GameEngineService {
     const parsedAction = this.parseAction.parse(action);
 
     const result = this.resolveAction.resolve(parsedAction, currentState);
-    console.log(result)
+    // console.log(result)
     const newState = this.stateManager.updateState(result);
 
     const events = this.eventProcessor.processor(newState, result);

@@ -3,6 +3,18 @@
   "name": "Banheiro",
   "floor": "segundo_andar",
   "description": "É um banheiro simples, uma privada, pia para lavar as mãos ou objetos, um espelho e uma banheira no canto com uma cortina",
+  "interactables": [
+    {
+      "id": "pia_banheiro_203",
+      "name": "Pia",
+      "aliases": ["pia", "lavatório"]
+    },
+    {
+      "id": "espelho_banheiro_203",
+      "name": "Espelho",
+      "aliases": ["espelho"]
+    }
+  ],
   "npcs": [],
   "connections": ["hospital_quarto_203"],
   "items": [],

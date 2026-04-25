@@ -19,7 +19,7 @@
   ],
 
   "effects": {
-    "addClues": ["caneta_suja"],
+    "addItems": ["caneta_suja"],
     "updateWorld": {
       "hospital": "suspeita"
     }

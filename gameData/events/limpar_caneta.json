@@ -7,13 +7,13 @@
 
   "trigger": {
     "type": "USE",
-    "item": "caneta",
-    "target": "pia"
+    "item": "caneta_suja",
+    "target": "pia_banheiro_203"
   },
 
   "conditions": {
-    "location": "banheiro_103",
-    "hasClue": "caneta_suja",
+    "location": "hospital_banheiro_quarto_203",
+    "hasItem": "caneta_suja",
     "notCompleted": true
   },
 
@@ -22,7 +22,7 @@
   ],
 
   "effects": {
-    "removeClues": ["caneta_suja"],
+    "removeItems": ["caneta_suja"],
     "addClues": ["iniciais_caneta"]
   },
 

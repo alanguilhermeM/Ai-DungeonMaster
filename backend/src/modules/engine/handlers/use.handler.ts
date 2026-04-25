@@ -1,32 +1,26 @@
 export const handleUse = (parsedAction, state, service) => {
-    const { gameData, resolveNpcTarget } = service;
-    const location = gameData.getLocation(state.currentLocation);
-  
-    if (!location) {
-      return { type: 'INVALID_ACTION' };
-    }
-  
-    const npcs = location.npcs || [];
-  
+    const { gameData, resolve } = service;
+    const item = parsedAction.item;
     const target = parsedAction.target;
-    if (!target) {
+
+    if (!target ) {
       return {
-        type: 'INVALID_ACTION',
+        type: 'INVALID_USE',
       };
     }
-  
-    const resolvedNpc = resolveNpcTarget(target, npcs);
-  
-    if (!resolvedNpc) {
-      return { type: 'NPC_NOT_FOUND' };
+    
+    const resolvedUse = resolve(gameData, state, item, target);
+    
+    if (!resolvedUse.target ) {
+      return {
+        type: 'INVALID_USE',
+      };
     }
-  
-    const npc = gameData.getNPC(resolvedNpc);
-  
+
     return {
-      type: 'TALK',
-      npcId: resolvedNpc,
-      npc,
-    };
+      type: 'USE',
+      item: resolvedUse.item,
+      target: resolvedUse.target,
+      input: parsedAction.input
+    }
   };
-  

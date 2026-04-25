@@ -8,12 +8,14 @@ export class NarrativeService {
   generateNarrative(result: any, state, events: any) {
     const base = this.buildBaseNarrative(result, state);
     const eventText = this.buildEventsNarrative(events);
-    const worldNarrative = state.pendingNarratives
+    const worldNarrative = state.pendingNarratives;
 
-    if(worldNarrative.length > 0) {
-      const narrative = [base, eventText, worldNarrative.join('\n\n')].filter(Boolean).join('\n\n');
-      state.pendingNarratives = []
-      return narrative
+    if (worldNarrative.length > 0) {
+      const narrative = [base, eventText, worldNarrative.join('\n\n')]
+        .filter(Boolean)
+        .join('\n\n');
+      state.pendingNarratives = [];
+      return narrative;
     }
 
     return [base, eventText].filter(Boolean).join('\n\n');
@@ -29,19 +31,20 @@ export class NarrativeService {
 
       case 'MOVE':
         const location = this.gameData.getLocation(result.target);
-        const variations = [
+        const variationsMove = [
           `Você se move para ${location.name}`,
           `Você caminha até ${location.name}`,
           `Você segue em direção a ${location.name}`,
         ];
-        const random =
-          variations[Math.floor(Math.random() * variations.length)];
+        const randomMove =
+          variationsMove[Math.floor(Math.random() * variationsMove.length)];
 
         baseNarrative = location
-          ? random
+          ? randomMove
           : 'Você se move, mas algo parece estranho...';
         break;
-
+      case 'USE':
+        break;
       case 'TALK':
         baseNarrative = this.buildTalkNarrative(result, state);
         break;
@@ -56,6 +59,10 @@ export class NarrativeService {
 
       case 'INVALID_ACTION':
         baseNarrative = 'Você não sabe como fazer isso.';
+        break;
+      
+      case 'INVALID_USE':
+        baseNarrative = 'Você não pode usar isso aqui';
         break;
 
       default:
@@ -104,14 +111,17 @@ export class NarrativeService {
       `hospital_${hospitalState}_time_${time}`,
       `hospital_${hospitalState}`,
       `time_${time}`,
-      "default"
-    ]
+      'default',
+    ];
 
     for (const key of keys) {
-      if(npcTarget.dialogues[key]) {
-        const dialogue = npcTarget.dialogues[key][(Math.floor(Math.random() * npcTarget.dialogues[key].length))];
-        console.log(dialogue)
-        return dialogue
+      if (npcTarget.dialogues[key]) {
+        const dialogue =
+          npcTarget.dialogues[key][
+            Math.floor(Math.random() * npcTarget.dialogues[key].length)
+          ];
+        console.log(dialogue);
+        return dialogue;
       }
     }
   }
