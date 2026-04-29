@@ -7,7 +7,12 @@
     {
       "id": "pia_banheiro_203",
       "name": "Pia",
-      "aliases": ["pia", "lavatório"]
+      "aliases": ["pia", "lavatório"],
+      "useInteractions": {
+        "caneta_suja": {
+          "event": "limpar_caneta"
+        }
+      }
     },
     {
       "id": "espelho_banheiro_203",

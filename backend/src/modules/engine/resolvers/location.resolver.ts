@@ -17,6 +17,40 @@ export class LocationResolve {
     },
   };
 
+  resolve = (gameData, state, target) => {
+    const locationId = this.resolveLocationTarget(target);
+    const locations = gameData.data.locations;
+    const currentLocation = locations[state.currentLocation];
+    const locationExist = locations[locationId];
+    
+    if (!locationExist) {
+      return {
+        type: 'MOVE',
+        blockedReason: 'INVALID_MOVE',
+      };
+    }
+
+    const effects = locationExist.effects;
+
+    if (!currentLocation.connections.includes(locationId)) {
+      return {
+        type: 'MOVE',
+        blockedReason: 'INVALID_MOVE',
+        narrativeHint: 'Player tries to move to a location tha is not connected to the current location'
+      };
+    }
+
+    return {
+      location: locationExist,
+      locationId,
+      hasEffect: true,
+      effects: {
+        moveTo: locationId,
+        ...(effects ?? {}),
+      },
+    };
+  };
+
   resolveLocationTarget = (target: string) => {
     const normalized = target.toLowerCase();
 
