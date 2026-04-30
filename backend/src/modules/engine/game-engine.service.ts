@@ -31,7 +31,7 @@ export class GameEngineService {
     this.mainPhase(newState, events, executedEvents);
     this.postPhase(newState, result);
   
-    const story = this.narrative.generateNarrative(
+    const story = await this.narrative.generateNarrative(
       result,
       newState,
       executedEvents,

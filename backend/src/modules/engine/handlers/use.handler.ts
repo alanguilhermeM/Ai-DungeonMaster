@@ -26,7 +26,6 @@ export const handleUse = (parsedAction, state, service) => {
   }
 
   const resolvedUse = resolve(gameData, state, item, target);
-  console.log(resolvedUse)
 
   if (!resolvedUse.item) {
     return {

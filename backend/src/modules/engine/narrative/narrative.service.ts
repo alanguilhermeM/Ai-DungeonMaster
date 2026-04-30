@@ -1,14 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { GameDataService } from 'src/modules/gamedata/gamedata.service';
+import { NarrativeEngineService } from '../narrative-engine.service';
 
 @Injectable()
 export class NarrativeService {
-  constructor(private readonly gameData: GameDataService) {}
+  constructor(private readonly gameData: GameDataService, readonly narrativeIa: NarrativeEngineService) {}
 
-  generateNarrative(result: any, state, events: any) {
+  async generateNarrative(result: any, state, events: any) {
     const base = this.buildBaseNarrative(result, state);
     const eventText = this.buildEventsNarrative(events);
     const worldNarrative = state.pendingNarratives;
+
+    const context = this.buildNarrativeContext(result, state, events, worldNarrative)
+    // console.log(context)
+    const iaNarrative = await this.narrativeIa.generateNarrativeIA(context);
 
     if (worldNarrative.length > 0) {
       const narrative = [base, eventText, worldNarrative.join('\n\n')]
@@ -60,7 +65,7 @@ export class NarrativeService {
       case 'INVALID_ACTION':
         baseNarrative = 'Você não sabe como fazer isso.';
         break;
-      
+
       case 'INVALID_USE':
         baseNarrative = 'Você não pode usar isso aqui';
         break;
@@ -120,9 +125,55 @@ export class NarrativeService {
           npcTarget.dialogues[key][
             Math.floor(Math.random() * npcTarget.dialogues[key].length)
           ];
-        console.log(dialogue);
         return dialogue;
       }
     }
+  }
+
+  buildNarrativeContext(result, state, events, pendingNarratives) {
+    const currentLocation =
+      result.location ?? this.gameData.getLocation(state.currentLocation);
+
+    return {
+      action: {
+        type: result.type,
+        input: result.input ?? result.raw?.input,
+        target: result.target,
+        item: result.item,
+      },
+
+      result: {
+        success: result.success,
+        hasEffect: result.hasEffect,
+        blockedReason: result.blockedReason,
+        narrativeHint: result.narrativeHint,
+      },
+
+      location: currentLocation
+        ? {
+            id: currentLocation.id,
+            name: currentLocation.name,
+            description: currentLocation.description,
+          }
+        : null,
+
+      player: {
+        inventory: state.player.inventory,
+        discoveredClues: state.discoveredClues,
+      },
+
+      worldState: state.worldState,
+
+      events: {
+        executedEvents: Array.isArray(events)
+          ? events.map((event) => ({
+              id: event.id,
+              name: event.name,
+              description: event.description,
+            }))
+          : [],
+        pendingNarratives,
+      },
+    };
   }
 }

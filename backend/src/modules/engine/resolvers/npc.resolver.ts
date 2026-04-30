@@ -3,7 +3,6 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export class NpcResolve {
   resolve = (gameData, target, npcs) => {
-    console.log(target)
     const npcId = this.resolveNpcTarget(target, npcs);
     const npc = gameData.data.npcs[npcId];
     if (!npc) {
