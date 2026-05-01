@@ -14,6 +14,7 @@ export class NarrativeService {
     const context = this.buildNarrativeContext(result, state, events, worldNarrative)
     // console.log(context)
     const iaNarrative = await this.narrativeIa.generateNarrativeIA(context);
+    console.log(iaNarrative)
 
     if (worldNarrative.length > 0) {
       const narrative = [base, eventText, worldNarrative.join('\n\n')]
