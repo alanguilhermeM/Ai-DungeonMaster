@@ -12,7 +12,7 @@ export class NarrativeService {
     const worldNarrative = state.pendingNarratives;
 
     const context = this.buildNarrativeContext(result, state, events, worldNarrative)
-    // console.log(context)
+    console.log(context)
     const iaNarrative = await this.narrativeIa.generateNarrativeIA(context);
     console.log(iaNarrative)
 

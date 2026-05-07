@@ -24,7 +24,6 @@ export class ActionResolve {
     switch (parsedAction.type) {
       case 'LOOK':
         result = handleLook(state, this.gameData);
-        console.log(result)
         break;
 
       case 'MOVE':
